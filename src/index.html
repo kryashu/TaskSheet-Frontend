@@ -28,32 +28,7 @@
   } else {
     config.extraQueryParameter = "scope=openid+profile";
   }
-  let authContext = new AuthenticationContext(config); // from the ADAL.js library
-  // See if there's a cached user and it matches the expected user
-  let user = authContext.getCachedUser();
-  if (user) {
-    if (user.profile.oid !== userObjectId) {
-      // User doesn't match, clear the cache
-      authContext.clearCache();
-    }
-  }
 
-  // In this example we are getting an id token (which ADAL.js returns if we ask for resource = clientId)
-  authContext.acquireToken(config.clientId, function (errDesc, token, err, tokenType) {
-    if (token) {
-      // Make sure ADAL gave us an id token
-      if (tokenType !== authContext.CONSTANTS.ID_TOKEN) {
-        token = authContext.getCachedToken(config.clientId);
-      }
-      alert(token);
-    } else {
-      console.log("Renewal failed: " + err);
-      // Failed to get the token silently; show the login button
-      alert('Login Error');
-      // You could attempt to launch the login popup here, but in browsers this could be blocked by
-      // a popup blocker, in which case the login attempt will fail with the reason FailedToOpenWindow.
-    }
-  })
 </script>
 <app-root></app-root>
 </body>
