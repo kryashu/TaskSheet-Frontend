@@ -23,7 +23,10 @@
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
     "@azure/msal-angular": "^1.0.0",
+    "@microsoft/teams-js": "^1.6.0",
     "adal-angular8": "^8.1.1",
+    "ngx-adal-8": "0.0.5",
+    "ngx-msal": "^7.1.5",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

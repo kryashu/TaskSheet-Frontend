@@ -9,53 +9,9 @@
   <link href="//netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <script src= 'https://statics.teams.cdn.office.net/sdk/v1.6.0/js/MicrosoftTeams.min.js'></script>
-  <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.15/js/adal.min.js" integrity="sha384-lIk8T3uMxKqXQVVfFbiw0K/Nq+kt1P3NtGt/pNexiDby2rKU6xnDY8p16gIwKqgI" crossorigin="anonymous"></script>
+  <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.17/js/adal.min.js"></script>
 </head>
 <body class="mat-typography">
-<script>
-  microsoftTeams.initialize();
-  // ADAL.js configuration
-  let config = {
-    clientId: "be49e010-1df3-4bc0-a560-f6996e701b59",
-    // redirectUri must be in the list of redirect URLs for the Azure AD app
-    redirectUri: window.location.origin + "/tab-auth/silent-end",
-    cacheLocation: "localStorage",
-    navigateToLoginRequestUrl: false,
-  };
-  let loginHint = microsoftTeams.getContext();
-  if (loginHint) {
-    config.extraQueryParameter = "scope=openid+profile&login_hint=" + encodeURIComponent(loginHint);
-  } else {
-    config.extraQueryParameter = "scope=openid+profile";
-  }
-  let authContext = new AuthenticationContext(config); // from the ADAL.js library
-  // See if there's a cached user and it matches the expected user
-  let user = authContext.getCachedUser();
-  if (user) {
-    if (user.profile.oid !== userObjectId) {
-      // User doesn't match, clear the cache
-      authContext.clearCache();
-    }
-  }
-
-  // In this example we are getting an id token (which ADAL.js returns if we ask for resource = clientId)
-  authContext.acquireToken(config.clientId, function (errDesc, token, err, tokenType) {
-    if (token) {
-      // Make sure ADAL gave us an id token
-      if (tokenType !== authContext.CONSTANTS.ID_TOKEN) {
-        token = authContext.getCachedToken(config.clientId);
-      }
-      alert(token);
-    } else {
-      console.log("Renewal failed: " + err);
-      // Failed to get the token silently; show the login button
-      alert('Login Error');
-      // You could attempt to launch the login popup here, but in browsers this could be blocked by
-      // a popup blocker, in which case the login attempt will fail with the reason FailedToOpenWindow.
-    }
-  })
-</script>
 <app-root></app-root>
 </body>
 </html>
