@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import * as microsoftTeams from '@microsoft/teams-js';
 import {NgxAdalService} from 'ngx-adal-8';
 @Component({
   selector: 'app-task-sheet',
@@ -14,7 +13,6 @@ email;
   constructor(private authService: NgxAdalService) { }
 
   ngOnInit(): void {
-    microsoftTeams.initialize();
     this.user = this.authService.userInfo.profile.name;
     this.email = this.authService.userInfo.profile.upn;
   }
