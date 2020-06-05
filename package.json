@@ -12,10 +12,13 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/build-angular": "~0.901.7",
     "@angular/animations": "^9.1.9",
     "@angular/cdk": "^9.2.4",
+    "@angular/cli": "~9.1.7",
     "@angular/common": "~9.1.9",
     "@angular/compiler": "~9.1.9",
+    "@angular/compiler-cli": "~9.1.9",
     "@angular/core": "~9.1.9",
     "@angular/forms": "~9.1.9",
     "@angular/material": "^9.2.4",
@@ -25,16 +28,15 @@
     "@azure/msal-angular": "^1.0.0",
     "@microsoft/teams-js": "^1.6.0",
     "adal-angular8": "^8.1.1",
+    "express": "^4.17.1",
     "ngx-adal-8": "0.0.5",
     "ngx-msal": "^7.1.5",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
+    "typescript": "~3.8.3",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.901.7",
-    "@angular/cli": "~9.1.7",
-    "@angular/compiler-cli": "~9.1.9",
     "@types/node": "^12.11.1",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
@@ -48,8 +50,7 @@
     "karma-jasmine-html-reporter": "^1.4.2",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
-    "tslint": "~6.1.0",
-    "typescript": "~3.8.3"
+    "tslint": "~6.1.0"
   },
   "engines": {
     "node": "12.17.0",
