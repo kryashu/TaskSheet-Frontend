@@ -1,19 +1,16 @@
 <h1>Welcome {{user}}!</h1>
-<!--<mat-paginator [length]="100"-->
-<!--               [pageSize]="3"-->
-<!--               [pageSizeOptions]="[1,3]">-->
-<!--</mat-paginator>-->
-<div *ngFor="let day of days" style="float: left;padding-right: 10px;padding-top: 10px">
-<mat-card style="width: 800px">
+<mat-paginator [length]="days.length" [pageSize]="1" [hidePageSize]="true" (page)="on_page_change($event)">
+</mat-paginator>
+<mat-card>
   <mat-card-title>
-  <a>{{day}}</a>
+  <a>{{days[page_index]}}</a>
   </mat-card-title>
   <mat-card-content>
-   <div *ngFor="let items of task">
+   <div *ngFor="let items of task" style="padding-top: 40px">
      <a>{{items}}</a>
    </div>
   </mat-card-content>
-  <button class="btn btn-primary">+ Add Task</button>
+  <button class="btn btn-primary" (click)="add_event()">+ Add Task</button>
 </mat-card>
-</div>
+
 

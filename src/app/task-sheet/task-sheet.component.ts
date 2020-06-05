@@ -8,14 +8,21 @@ import {NgxAdalService} from 'ngx-adal-8';
 })
 export class TaskSheetComponent implements OnInit {
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-task = ['task1', 'task2'];
+task = ['task'];
 user;
 email;
+page_index = 0;
   constructor(private authService: NgxAdalService) { }
 
   ngOnInit(): void {
     microsoftTeams.initialize();
     this.user = this.authService.userInfo.profile.name;
     this.email = this.authService.userInfo.profile.upn;
+  }
+  on_page_change(event){
+    this.page_index = event.pageIndex;
+  }
+  add_event(){
+    this.task.push('task' +this.task.length);
   }
 }
