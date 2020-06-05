@@ -11,34 +11,19 @@ export class ConfigComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('ngOnInit');
-    // initialize teams
     microsoftTeams.initialize();
-    // get context
-    microsoftTeams.getContext((context: microsoftTeams.Context) => {
-      console.log('getContext');
-      this.setValidityState(true);
-    });
-
-    microsoftTeams.settings.registerOnSaveHandler((saveEvent: microsoftTeams.settings.SaveEvent) => {
-      // Calculate host dynamically to enable local debugging
-      const host = 'https://' + window.location.host;
-
+    microsoftTeams.settings.setValidityState(true);
+    this.start();
+  }
+  start(){
+    microsoftTeams.settings.registerOnSaveHandler((saveEvent) => {
       microsoftTeams.settings.setSettings({
-        contentUrl: host + '/task_sheet',
-        suggestedDisplayName: 'Task Sheet',
-        removeUrl: host + '/login',
-        entityId: '1'
+        websiteUrl: 'https://task-sheet-symb.herokuapp.com/',
+        contentUrl: 'https://task-sheet-symb.herokuapp.com/task_sheet',
+        entityId: 'task_Sheet_tab',
+        suggestedDisplayName: 'Task Sheet'
       });
-
       saveEvent.notifySuccess();
     });
-
   }
-
-  public setValidityState(val: boolean) {
-    microsoftTeams.settings.setValidityState(true);
-  }
-  }
-
-
+}
