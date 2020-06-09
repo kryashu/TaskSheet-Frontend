@@ -41,7 +41,6 @@ page_index = 0;
   }
 
   get_task(){
-    console.log('getting task');
     this.dataService.get_task(this.email).subscribe(reply => {
       console.log(reply);
       // @ts-ignore
@@ -55,7 +54,6 @@ page_index = 0;
 
   // tslint:disable-next-line:variable-name
   end_task(task_id, created_by){
-    console.log(task_id);
     this.dataService.end_task(task_id, created_by).subscribe(reply => {
       this.get_task();
     }, error => {
