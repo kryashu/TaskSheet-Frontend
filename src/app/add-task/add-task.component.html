@@ -1,0 +1,17 @@
+<!--<h1 mat-dialog-title>Hi! {{data.name}}</h1>-->
+<div mat-dialog-content style="padding-bottom: 10px">
+  <p>Enter Task Details:-</p>
+    <label>Name:</label>
+    <input  [(ngModel)]="this.name">
+  <div style="padding-top: 10px"></div>
+    <label>Description:</label>
+    <input matInput  [(ngModel)]="this.description">
+  <div style="padding-top: 10px"></div>
+    <label>URL:</label>
+    <input matInput [(ngModel)]="this.url">
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="btn btn-danger" (click)="onNoClick()">Cancle</button>
+  <div style="padding-right: 30px"></div>
+  <button class="btn btn-primary" mat-button [mat-dialog-close]="{name: this.name , description: this.description, url:this.url,created_by: data.email}" cdkFocusInitial>Submit</button>
+</div>

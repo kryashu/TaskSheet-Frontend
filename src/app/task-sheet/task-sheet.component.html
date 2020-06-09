@@ -1,16 +1,33 @@
 <h1>Welcome {{user}}!</h1>
-<mat-paginator [length]="days.length" [pageSize]="1" [hidePageSize]="true" (page)="on_page_change($event)">
+
+<mat-paginator [length]="length" [pageSize]="10" [hidePageSize]="true" (page)="on_page_change($event)">
 </mat-paginator>
 <mat-card>
   <mat-card-title>
-  <a>{{days[page_index]}}</a>
+  <a>Task List</a>
   </mat-card-title>
-  <mat-card-content>
-   <div *ngFor="let items of task" style="padding-top: 40px">
-     <a>{{items}}</a>
-   </div>
+  <mat-card-content style="padding-top: 10px;padding-bottom: 10px">
+    <table style="width: 80%">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>URL</th>
+        <th>Created On</th>
+        <th>Status</th>
+      </tr>
+      <tr *ngFor="let task of task_list">
+        <td>{{ task.id }}</td>
+        <td>{{ task.name }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.url}}</td>
+        <td>{{task.created_on}}</td>
+        <td>{{ task.status }}</td>
+        <td><button class="btn btn-danger" *ngIf="task.status === 'in progress'" (click)="end_task(task.id,email)">End Task</button><a *ngIf="task.status === 'completed'">Ended on : {{task.end_on}}</a></td>
+      </tr>
+    </table>
   </mat-card-content>
-  <button class="btn btn-primary" (click)="add_event()">+ Add Task</button>
+  <button class="btn btn-primary" (click)="openDialog()">+ Add Task</button>
 </mat-card>
 
 

@@ -11,6 +11,10 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { LoginComponent } from './login/login.component';
 import { NgxAdalModule } from 'ngx-adal-8';
 import { ConfigComponent } from './config/config.component';
+import { AddTaskComponent } from './add-task/add-task.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,8 @@ import { ConfigComponent } from './config/config.component';
     RegisterComponent,
     TaskSheetComponent,
     LoginComponent,
-    ConfigComponent
+    ConfigComponent,
+    AddTaskComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +38,10 @@ import { ConfigComponent } from './config/config.component';
       redirectUri: `frameRedirect.html`,
       postLogoutRedirectUri: `frameRedirect.html`,
       cacheLocation: 'localStorage'
-    })
+    }),
+    MatDialogModule,
+    FormsModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]
