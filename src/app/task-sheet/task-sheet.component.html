@@ -20,7 +20,7 @@
         <td>{{ task_list.indexOf(task)+1 }}</td>
         <td>{{ task.name }}</td>
         <td>{{ task.description }}</td>
-        <td>{{ task.url}}</td>
+        <td><a href="{{task.url}}">{{ task.url}}</a></td>
         <td>{{task.created_on}}</td>
         <td>{{ task.status }}</td>
         <td><button class="btn btn-danger" *ngIf="task.status === 'in progress'" (click)="end_task(task.id,email)">End Task</button><a *ngIf="task.status === 'completed'">Ended on : {{task.end_on}}</a></td>
