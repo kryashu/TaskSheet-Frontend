@@ -9,7 +9,7 @@
   <mat-card-content style="padding-top: 10px;padding-bottom: 10px">
     <table style="width: 80%">
       <tr>
-        <th>ID</th>
+        <th>S.No</th>
         <th>Name</th>
         <th>Description</th>
         <th>URL</th>
@@ -17,7 +17,7 @@
         <th>Status</th>
       </tr>
       <tr *ngFor="let task of task_list">
-        <td>{{ task.id }}</td>
+        <td>{{ task_list.indexOf(task)+1 }}</td>
         <td>{{ task.name }}</td>
         <td>{{ task.description }}</td>
         <td>{{ task.url}}</td>
