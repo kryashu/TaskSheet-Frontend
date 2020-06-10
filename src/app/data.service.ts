@@ -5,8 +5,8 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class DataService {
-// url = 'https://tasksheet-symb.herokuapp.com/';
-url = 'http://127.0.0.1:5000/';
+url = 'https://tasksheet-symb.herokuapp.com/';
+//url = 'http://127.0.0.1:5000/';
   constructor(private http: HttpClient) { }
 
   add_user(data){
