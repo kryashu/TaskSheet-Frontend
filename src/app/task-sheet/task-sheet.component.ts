@@ -11,8 +11,9 @@ import {AddTaskComponent} from '../add-task/add-task.component';
   styleUrls: ['./task-sheet.component.css']
 })
 export class TaskSheetComponent implements OnInit {
-// days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-task_list;
+days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+task_list = [];
+date = new Date();
 length;
 user;
 email;
@@ -41,7 +42,9 @@ page_index = 0;
   }
 
   get_task(){
-    this.dataService.get_task(this.email).subscribe(reply => {
+    // tslint:disable-next-line:max-line-length
+    const selected_date = this.date.getFullYear() + '-' + (this.date.getMonth() >= 10 ? (this.date.getMonth()+1) : '0' + (this.date.getMonth()+1)) + '-' + (this.date.getDate() >= 10 ? this.date.getDate() : '0' + this.date.getDate());
+    this.dataService.get_task(this.email, selected_date).subscribe(reply => {
       console.log(reply);
       // @ts-ignore
       this.task_list = reply.data.data;
