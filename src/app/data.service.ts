@@ -6,7 +6,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class DataService {
 url = 'https://tasksheet-symb.herokuapp.com/';
-//url = 'http://127.0.0.1:5000/';
+// url = 'http://127.0.0.1:5000/';
   constructor(private http: HttpClient) { }
 
   add_user(data){
@@ -21,5 +21,14 @@ url = 'https://tasksheet-symb.herokuapp.com/';
   // tslint:disable-next-line:variable-name
   end_task(id, created_by){
     return this.http.post(this.url + 'end_task', {task_id: id, email: created_by});
+  }
+  add_manager(user, manager){
+    return this.http.post(this.url + 'add_manager', {user_email: user, manager_email: manager});
+  }
+  get_all_user(){
+    return this.http.post(this.url + 'get_all_users', {});
+  }
+  get_associate(user){
+    return this.http.post(this.url + 'get_associate', {user_email: user});
   }
 }

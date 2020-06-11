@@ -6,10 +6,21 @@
     <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
+  <mat-form-field *ngIf="associate_list.length > 0">
+    <mat-label>Select Associate</mat-label>
+    <mat-select [(ngModel)]="associate_email" (ngModelChange)="show_associate()">
+      <mat-option *ngFor="let user of associate_list" [value]="user.email">
+        {{user.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div style="float: right">
+    <span><button mat-button class="btn btn-info"  (click)="previous()"><<</button> <button mat-button class="btn btn-info" (click)="next()">>></button></span>
+  </div>
 </div>
 <mat-card>
   <mat-card-title>
-  <a>Task List</a>
+  <a>{{days[weekday]}}</a>
   </mat-card-title>
   <mat-card-content style="padding-top: 10px;padding-bottom: 10px">
     <div *ngIf="task_list.length > 0">
@@ -21,7 +32,7 @@
         <th>URL</th>
         <th>Created On</th>
         <th>Status</th>
-        <th>Toggle</th>
+        <th *ngIf="!associate_flag">Toggle</th>
       </tr>
       <tr *ngFor="let task of task_list">
         <td>{{ task_list.indexOf(task)+1 }}</td>
@@ -30,13 +41,18 @@
         <td><a href="{{task.url}}" target="_blank">{{ task.url}}</a></td>
         <td>{{task.created_on}}</td>
         <td>{{ task.status }}<a *ngIf="task.status === 'completed'"> on : {{task.end_on}}</a></td>
-        <td><button class="btn btn-danger" [disabled]="task.status === 'completed'"  (click)="end_task(task.id,email)">End Task</button></td>
+        <td *ngIf="!associate_flag"><button mat-button class="btn btn-danger" [disabled]="task.status === 'completed'"  (click)="end_task(task.id,email)">End Task</button></td>
       </tr>
     </table>
     </div>
     <div *ngIf="task_list.length == 0"><a>No Task Added</a></div>
   </mat-card-content>
-  <button class="btn btn-primary" (click)="openDialog()">+ Add Task</button>
+  <button mat-button class="btn btn-primary" *ngIf="!associate_flag" (click)="openTaskDialog()">+ Add Task</button>
+  <button mat-button class="btn" *ngIf="!associate_flag" (click)="openManagerDialog()">Add Manager</button>
+  <button mat-button class="btn btn-primary" *ngIf="associate_flag" (click)="set_user_details()">Go To Your Task Sheet</button>
 </mat-card>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">
+  <p style="color: white">Please Wait. </p>
+</ngx-spinner>
 
 

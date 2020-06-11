@@ -18,6 +18,12 @@ import {MatFormFieldModule, MatFormFieldControl} from '@angular/material/form-fi
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
+import { AddManagerComponent } from './add-manager/add-manager.component';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {NgxSpinnerModule} from 'ngx-spinner';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -26,7 +32,8 @@ import {MatInputModule} from '@angular/material/input';
     TaskSheetComponent,
     LoginComponent,
     ConfigComponent,
-    AddTaskComponent
+    AddTaskComponent,
+    AddManagerComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +55,11 @@ import {MatInputModule} from '@angular/material/input';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    NgxSpinnerModule,
+    ToastrModule.forRoot()
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]

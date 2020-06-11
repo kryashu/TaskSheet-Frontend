@@ -4,6 +4,9 @@ import {NgxAdalService} from 'ngx-adal-8';
 import {DataService} from '../data.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddTaskComponent} from '../add-task/add-task.component';
+import {AddManagerComponent} from '../add-manager/add-manager.component';
+import { NgxSpinnerService} from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-task-sheet',
@@ -11,21 +14,39 @@ import {AddTaskComponent} from '../add-task/add-task.component';
   styleUrls: ['./task-sheet.component.css']
 })
 export class TaskSheetComponent implements OnInit {
-days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+// tslint:disable-next-line:variable-name
 task_list = [];
+// tslint:disable-next-line:variable-name
+associate_list = [];
+// tslint:disable-next-line:variable-name
+associate_email;
+// tslint:disable-next-line:variable-name
+associate_flag = false;
 date = new Date();
 length;
+weekday;
 user;
 email;
+// tslint:disable-next-line:variable-name
 page_index = 0;
-  constructor(private authService: NgxAdalService, private dataService: DataService, public dialog: MatDialog) { }
+  constructor(private authService: NgxAdalService, private dataService: DataService, public dialog: MatDialog,  private SpinnerService: NgxSpinnerService, private toaster: ToastrService) { }
 
   ngOnInit(): void {
     microsoftTeams.initialize();
     this.add_user();
     this.get_task();
+    this.getAssociate();
   }
-
+  show_error(message){
+    this.toaster.error(message);
+  }
+  set_user_details(){
+  this.email = this.authService.userInfo.profile.upn;
+  this.get_task();
+  this.associate_email = '';
+  this.associate_flag = false;
+  }
   add_user(){
     this.user = this.authService.userInfo.profile.name;
     this.email = this.authService.userInfo.profile.upn;
@@ -36,35 +57,61 @@ page_index = 0;
       console.log(error);
     });
   }
-
+  show_associate(){
+    console.log(this.associate_email);
+    this.email = this.associate_email;
+    this.associate_flag = true;
+    this.get_task();
+  }
   on_page_change(event){
     this.page_index = event.pageIndex;
   }
-
+  next(){
+    const next = new Date(this.date);
+    next.setDate(this.date.getDate() + 1);
+    this.date = next;
+    this.get_task();
+  }
+  previous(){
+    const next = new Date(this.date);
+    next.setDate(this.date.getDate() - 1);
+    this.date = next;
+    this.get_task();
+  }
   get_task(){
-    // tslint:disable-next-line:max-line-length
-    const selected_date = this.date.getFullYear() + '-' + (this.date.getMonth() >= 10 ? (this.date.getMonth()+1) : '0' + (this.date.getMonth()+1)) + '-' + (this.date.getDate() >= 10 ? this.date.getDate() : '0' + this.date.getDate());
+    this.SpinnerService.show();
+    // tslint:disable-next-line:max-line-length variable-name
+    const selected_date = this.date.getFullYear() + '-' + (this.date.getMonth() >= 10 ? (this.date.getMonth() + 1) : '0' + (this.date.getMonth() + 1)) + '-' + (this.date.getDate() >= 10 ? this.date.getDate() : '0' + this.date.getDate());
+    this.weekday = this.date.getDay();
     this.dataService.get_task(this.email, selected_date).subscribe(reply => {
       console.log(reply);
       // @ts-ignore
       this.task_list = reply.data.data;
       // @ts-ignore
       this.length = reply.data.length;
+      this.SpinnerService.hide();
     }, error => {
-      console.log(error);
+      this.SpinnerService.hide();
+      this.show_error(error.message);
+      if (error.message === 'No Task Found'){
+       this.task_list = [];
+      }
     });
   }
 
   // tslint:disable-next-line:variable-name
   end_task(task_id, created_by){
+    this.SpinnerService.show();
     this.dataService.end_task(task_id, created_by).subscribe(reply => {
       this.get_task();
+      this.SpinnerService.hide();
     }, error => {
-      console.log(error);
+      this.SpinnerService.hide();
+      this.show_error(error.message);
     });
   }
 
-  openDialog(){
+  openTaskDialog(){
     const dialogRef = this.dialog.open(AddTaskComponent, {
       width: '250px',
       data: { name: this.user, email: this.email}
@@ -73,12 +120,46 @@ page_index = 0;
       console.log(result);
       if (result){
         this.dataService.add_task(result).subscribe(reply => {
+          this.date = new Date();
           this.get_task();
         }, error => {
-          console.log(error);
+          this.show_error(error.message);
         });
       }
     });
   }
 
+  getAssociate(){
+    this.dataService.get_associate(this.email).subscribe(reply => {
+      // @ts-ignore
+      this.associate_list = reply.data.data;
+    }, error => {
+      this.show_error(error.message);
+    });
+  }
+
+ openManagerDialog(){
+   // tslint:disable-next-line:variable-name
+   let user_list = [];
+   this.SpinnerService.show();
+   this.dataService.get_all_user().subscribe(reply => {
+     // @ts-ignore
+     user_list = reply.data.data;
+     this.SpinnerService.hide();
+     const dialogRef = this.dialog.open(AddManagerComponent, {
+       width: '250px',
+       data: {list: user_list}
+     });
+     dialogRef.afterClosed().subscribe(result => {
+       if (result){
+         this.dataService.add_manager(this.email, result.selected_user).subscribe(reply => {
+           // @ts-ignore
+           this.toaster.success(reply.message);
+         }, error => {
+           this.show_error(error.message);
+         });
+       }
+     });
+    });
+ }
 }
