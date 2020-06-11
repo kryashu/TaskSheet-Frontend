@@ -58,7 +58,6 @@ page_index = 0;
     });
   }
   show_associate(){
-    console.log(this.associate_email);
     this.email = this.associate_email;
     this.associate_flag = true;
     this.get_task();
@@ -84,7 +83,6 @@ page_index = 0;
     const selected_date = this.date.getFullYear() + '-' + (this.date.getMonth() >= 10 ? (this.date.getMonth() + 1) : '0' + (this.date.getMonth() + 1)) + '-' + (this.date.getDate() >= 10 ? this.date.getDate() : '0' + this.date.getDate());
     this.weekday = this.date.getDay();
     this.dataService.get_task(this.email, selected_date).subscribe(reply => {
-      console.log(reply);
       // @ts-ignore
       this.task_list = reply.data.data;
       // @ts-ignore
@@ -117,7 +115,6 @@ page_index = 0;
       data: { name: this.user, email: this.email}
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result){
         this.dataService.add_task(result).subscribe(reply => {
           this.date = new Date();
