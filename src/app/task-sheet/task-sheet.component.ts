@@ -30,41 +30,49 @@ user;
 email;
 // tslint:disable-next-line:variable-name
 page_index = 0;
+  // tslint:disable-next-line:max-line-length
   constructor(private authService: NgxAdalService, private dataService: DataService, public dialog: MatDialog,  private SpinnerService: NgxSpinnerService, private toaster: ToastrService) { }
 
   ngOnInit(): void {
     microsoftTeams.initialize();
     this.add_user();
-    this.get_task();
-    this.getAssociate();
   }
   show_error(message){
     this.toaster.error(message);
   }
   set_user_details(){
-  this.email = this.authService.userInfo.profile.upn;
   this.get_task();
   this.associate_email = '';
   this.associate_flag = false;
   }
   add_user(){
+    this.SpinnerService.show();
     this.user = this.authService.userInfo.profile.name;
     this.email = this.authService.userInfo.profile.upn;
-    const data = {name: this.user, email: this.email};
+    const data = {name: this.user, email: this.email, token: this.authService.accessToken};
     this.dataService.add_user(data).subscribe(reply => {
       console.log(reply);
+      // @ts-ignore
+      localStorage.setItem('token', 'bearer ' + reply.data.access_token);
+      this.get_task();
+      this.getAssociate();
+      this.SpinnerService.hide();
     }, error => {
       console.log(error);
     });
   }
   show_associate(){
-    this.email = this.associate_email;
     this.associate_flag = true;
-    this.get_task();
+    this.SpinnerService.show();
+    // tslint:disable-next-line:variable-name
+    const selected_date = this.date.getFullYear() + '-' + (this.date.getMonth() >= 10 ? (this.date.getMonth() + 1) : '0' + (this.date.getMonth() + 1)) + '-' + (this.date.getDate() >= 10 ? this.date.getDate() : '0' + this.date.getDate());
+    this.dataService.get_associate_task(this.associate_email, selected_date ).subscribe(reply => {
+      // @ts-ignore
+      this.task_list = reply.data.data;
+      this.SpinnerService.hide();
+    });
   }
-  on_page_change(event){
-    this.page_index = event.pageIndex;
-  }
+
   next(){
     const next = new Date(this.date);
     next.setDate(this.date.getDate() + 1);
@@ -78,11 +86,12 @@ page_index = 0;
     this.get_task();
   }
   get_task(){
+    if (!this.associate_flag){
     this.SpinnerService.show();
     // tslint:disable-next-line:max-line-length variable-name
     const selected_date = this.date.getFullYear() + '-' + (this.date.getMonth() >= 10 ? (this.date.getMonth() + 1) : '0' + (this.date.getMonth() + 1)) + '-' + (this.date.getDate() >= 10 ? this.date.getDate() : '0' + this.date.getDate());
     this.weekday = this.date.getDay();
-    this.dataService.get_task(this.email, selected_date).subscribe(reply => {
+    this.dataService.get_task(selected_date).subscribe(reply => {
       // @ts-ignore
       this.task_list = reply.data.data;
       // @ts-ignore
@@ -95,12 +104,16 @@ page_index = 0;
        this.task_list = [];
       }
     });
+    }
+    else{
+      this.show_associate();
+    }
   }
 
   // tslint:disable-next-line:variable-name
   end_task(task_id, created_by){
     this.SpinnerService.show();
-    this.dataService.end_task(task_id, created_by).subscribe(reply => {
+    this.dataService.end_task(task_id).subscribe(reply => {
       this.get_task();
       this.SpinnerService.hide();
     }, error => {
@@ -127,7 +140,7 @@ page_index = 0;
   }
 
   getAssociate(){
-    this.dataService.get_associate(this.email).subscribe(reply => {
+    this.dataService.get_associate().subscribe(reply => {
       // @ts-ignore
       this.associate_list = reply.data.data;
     }, error => {
@@ -149,7 +162,7 @@ page_index = 0;
      });
      dialogRef.afterClosed().subscribe(result => {
        if (result){
-         this.dataService.add_manager(this.email, result.selected_user).subscribe(reply => {
+         this.dataService.add_manager(result.selected_user).subscribe(reply => {
            // @ts-ignore
            this.toaster.success(reply.message);
          }, error => {
