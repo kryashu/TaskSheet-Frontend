@@ -47,9 +47,7 @@ page_index = 0;
   }
   add_user(){
     this.SpinnerService.show();
-    this.user = this.authService.userInfo.profile.name;
-    this.email = this.authService.userInfo.profile.upn;
-    const data = {name: this.user, email: this.email, token: this.authService.accessToken};
+    const data = {token: this.authService.accessToken};
     this.dataService.add_user(data).subscribe(reply => {
       // @ts-ignore
       localStorage.setItem('token', 'bearer ' + reply.data.access_token);
