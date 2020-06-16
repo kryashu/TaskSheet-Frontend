@@ -51,7 +51,6 @@ page_index = 0;
     this.email = this.authService.userInfo.profile.upn;
     const data = {name: this.user, email: this.email, token: this.authService.accessToken};
     this.dataService.add_user(data).subscribe(reply => {
-      console.log(reply);
       // @ts-ignore
       localStorage.setItem('token', 'bearer ' + reply.data.access_token);
       this.get_task();
